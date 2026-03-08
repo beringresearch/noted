@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noted. Privacy-first AI Meeting Notes & Action Items for Mac</title>
+  <meta name="description" content="Record meetings, generate summaries, and extract action items automatically. Noted runs locally on your Mac for complete privacy." />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --bg: #1c1c1e;
+      --bg2: #2c2c2e;
+      --bg3: #3a3a3c;
+      --border: #3a3a3c;
+      --border2: #48484a;
+      --text: #ffffff;
+      --text2: #aeaeb2;
+      --text3: #636366;
+      --accent: #63e6be;
+      --accent2: #4dd4a8;
+      --accent-muted: rgba(99, 230, 190, 0.16);
+      --accent2-muted: rgba(77, 212, 168, 0.14);
+      --danger: #ff453a;
+      --radius: 10px;
+      --font-mono: 'DM Mono', monospace;
+      --font-sans: 'DM Sans', sans-serif;
+      --max: 1160px;
+      --shadow: 0 24px 80px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background:
+        radial-gradient(circle at top right, rgba(99,230,190,0.10), transparent 22%),
+        radial-gradient(circle at top left, rgba(99,230,190,0.05), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; }
+
+    .container {
+      width: min(calc(100% - 40px), var(--max));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(28,28,30,0.72);
+      border-bottom: 1px solid rgba(72,72,74,0.65);
+    }
+
+    .navInner {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .brandMark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      color: #0f1312;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-mono);
+      font-size: 15px;
+      box-shadow: 0 10px 30px rgba(99,230,190,0.18);
+    }
+
+    .navLinks {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      color: var(--text2);
+      font-size: 14px;
+    }
+
+    .navLinks a:hover { color: var(--text); }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 13px 18px;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      font-size: 14px;
+      font-weight: 600;
+      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      cursor: pointer;
+    }
+
+    .button:hover { transform: translateY(-1px); }
+
+    .buttonPrimary {
+      background: var(--accent);
+      color: #111312;
+      box-shadow: 0 12px 40px rgba(99,230,190,0.16);
+    }
+
+    .buttonPrimary:hover { background: var(--accent2); }
+
+    .buttonSecondary {
+      background: rgba(58,58,60,0.55);
+      border-color: var(--border2);
+      color: var(--text);
+    }
+
+    .buttonSecondary:hover {
+      background: var(--bg3);
+      border-color: var(--accent);
+    }
+
+    .hero {
+      padding: 72px 0 52px;
+    }
+
+    .heroWrap {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: var(--accent-muted);
+      border: 1px solid rgba(99,230,190,0.16);
+      color: var(--accent);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(44px, 7vw, 84px);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      max-width: 9.5ch;
+      margin-bottom: 18px;
+    }
+
+    .heroCopy {
+      max-width: 58ch;
+      color: var(--text2);
+      font-size: 17px;
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+
+    .heroActions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .heroMeta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .metaPill {
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border2);
+      background: rgba(58,58,60,0.4);
+      color: var(--text2);
+      font-size: 12px;
+      font-family: var(--font-mono);
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(58,58,60,0.72), rgba(44,44,46,0.88));
+      border: 1px solid var(--border2);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .productShot {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .windowBar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      color: var(--text3);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--border2);
+    }
+
+    .appShell {
+      border: 1px solid var(--border);
+      background: rgba(28,28,30,0.92);
+      border-radius: 18px;
+      overflow: hidden;
+      min-height: 420px;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+    }
+
+    .sidebar {
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebarTop {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .logoRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 12px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .miniBrand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text2);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .miniBrand .brandMark {
+      width: 24px;
+      height: 24px;
+      font-size: 11px;
+      border-radius: 7px;
+    }
+
+    .iconBtn {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      color: var(--text2);
+      background: transparent;
+      border: none;
+      font-size: 14px;
+    }
+
+    .recordBtnWrap {
+      padding: 10px 12px 6px;
+    }
+
+    .recordBtn {
+      width: 100%;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 69, 58, 0.24);
+      background: linear-gradient(180deg, rgba(255,69,58,0.14), rgba(255,69,58,0.08));
+      color: #ffb4ae;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    .recordDot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #ff453a;
+      box-shadow: 0 0 0 4px rgba(255,69,58,0.14);
+    }
+
+    .progress {
+      padding: 12px 16px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .progressLabel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text2);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .progressBar {
+      height: 3px;
+      background: var(--border2);
+      border-radius: 2px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .progressFill {
+      width: 58%;
+      height: 100%;
+      background: var(--text2);
+      border-radius: 2px;
+    }
+
+    .sidebarDivider {
+      height: 1px;
+      background: var(--border);
+      margin: 8px 16px;
+    }
+
+    .calendarWrap {
+      margin: 6px 10px 0;
+      padding: 12px 10px 10px;
+      border-radius: 14px;
+      background: rgba(58,58,60,0.4);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .calendarHead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .calendarTitle {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--text2);
+      text-transform: uppercase;
+    }
+
+    .calendarNav {
+      color: var(--text3);
+      font-size: 12px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .calendarDays,
+    .calendarDates {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .calendarDays {
+      margin-bottom: 6px;
+    }
+
+    .calendarDays span {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text3);
+    }
+
+    .dateCell {
+      position: relative;
+      height: 22px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text2);
+    }
+
+    .dateCell.muted {
+      color: rgba(174,174,178,0.35);
+    }
+
+    .dateCell.today {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .dateCell.selected {
+      background: rgba(99,230,190,0.14);
+      color: var(--text);
+      border: 1px solid rgba(99,230,190,0.2);
+    }
+
+    .dateCell.hasEvent::after {
+      content: "";
+      position: absolute;
+      bottom: 2px;
+      width: 3px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .teamWrap {
+      margin: 8px 10px 0;
+      padding: 12px 10px 10px;
+      border-radius: 14px;
+      background: rgba(58,58,60,0.4);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .teamTop {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .teamTitle {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--text2);
+      text-transform: uppercase;
+    }
+
+    .teamCount {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text3);
+    }
+
+    .memberList {
+      display: grid;
+      gap: 8px;
+    }
+
+    .memberItem {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .memberAvatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      transform: rotate(45deg);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      color: #0f1312;
+      flex-shrink: 0;
+      opacity: 0.9;
+    }
+
+    .memberAvatar span {
+      transform: rotate(-45deg);
+    }
+
+    .memberMeta {
+      min-width: 0;
+    }
+
+    .memberName {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .memberRole {
+      font-size: 10px;
+      color: var(--text3);
+      font-family: var(--font-mono);
+      margin-top: 2px;
+    }
+
+    .navGroup {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 0 8px;
+    }
+
+    .navBtn {
+      background: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      color: var(--text2);
+      text-align: left;
+      width: 100%;
+      border: none;
+    }
+
+    .navBtn.active {
+      background: var(--bg3);
+      color: var(--text);
+    }
+
+    .navDot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: var(--text3);
+    }
+
+    .navDot.pending { background: var(--danger); opacity: 0.75; }
+    .navDot.done { background: var(--text2); }
+
+    .navCount {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text3);
+    }
+
+    .sortRow {
+      display: flex;
+      gap: 4px;
+      padding: 4px 8px 8px;
+    }
+
+    .sortBtn {
+      flex: 1;
+      padding: 4px 6px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text3);
+      font-size: 11px;
+      font-family: var(--font-sans);
+    }
+
+    .sortBtn.active {
+      background: var(--bg3);
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    .sidebarBottom {
+      margin-top: auto;
+      padding-bottom: 10px;
+    }
+
+    .mainPanel {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+    }
+
+    .search {
+      flex: 1;
+      min-width: 0;
+      height: 34px;
+      border-radius: var(--radius);
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      color: var(--text3);
+      font-size: 13px;
+    }
+
+    .toolbarBtn {
+      height: 34px;
+      padding: 0 14px;
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: #000;
+      font-weight: 600;
+      font-size: 12px;
+      border: none;
+      white-space: nowrap;
+    }
+
+    .flashBar {
+      background: var(--accent-muted);
+      border-bottom: 1px solid var(--accent-muted);
+      padding: 7px 18px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    .canvas {
+      padding: 14px 18px 18px;
+      display: grid;
+      gap: 12px;
+      overflow: hidden;
+      align-content: start;
+    }
+
+    .group {
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(44,44,46,0.38);
+    }
+
+    .groupHeader {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .chevron {
+      color: var(--text3);
+      font-size: 12px;
+    }
+
+    .groupTitle {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text);
+    }
+
+    .groupCount {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text3);
+      background: var(--bg);
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+
+    .transcriptBtn {
+      background: var(--accent-muted);
+      color: var(--accent);
+      font-size: 10px;
+      font-family: var(--font-mono);
+      padding: 2px 7px;
+      border-radius: 3px;
+      margin-left: auto;
+      border: 1px solid var(--accent-muted);
+      letter-spacing: 0.03em;
+    }
+
+    .groupSummary {
+      padding: 8px 14px;
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.5;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      font-style: italic;
+    }
+
+    .todoItem {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+
+    .todoItem:last-child { border-bottom: none; }
+
+    .checkbox {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid var(--border2);
+      border-radius: 4px;
+      background: transparent;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .checkbox.checked {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .todoContent {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .todoText {
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--text);
+    }
+
+    .todoMeta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .metaMeeting,
+    .priorityBadge,
+    .metaManual,
+    .metaDate {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      border-radius: 3px;
+    }
+
+    .metaMeeting {
+      color: var(--accent);
+      background: var(--accent-muted);
+      padding: 1px 6px;
+    }
+
+    .priorityBadge {
+      padding: 1px 6px;
+      border: 1px solid transparent;
+    }
+
+    .priority1 {
+      color: #f87171;
+      background: rgba(248, 113, 113, 0.12);
+      border-color: rgba(248, 113, 113, 0.3);
+    }
+
+    .priority2 {
+      color: #fbbf24;
+      background: rgba(251, 191, 36, 0.12);
+      border-color: rgba(251, 191, 36, 0.3);
+    }
+
+    .metaManual {
+      color: var(--text3);
+      background: var(--bg3);
+      padding: 1px 5px;
+      border: 1px solid var(--border);
+    }
+
+    .metaDate {
+      color: var(--text3);
+    }
+
+    .todoActions {
+      display: flex;
+      gap: 2px;
+      flex-shrink: 0;
+      opacity: 0.45;
+    }
+
+    .actionBtn {
+      background: none;
+      color: var(--text3);
+      font-size: 12px;
+      padding: 4px 6px;
+      border-radius: var(--radius);
+    }
+
+    section {
+      padding: 34px 0;
+    }
+
+    .sectionHead {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .kicker {
+      color: var(--accent);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 10px;
+    }
+
+    .sectionText {
+      color: var(--text2);
+      max-width: 64ch;
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    .sectionMono {
+      color: var(--text3);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .featureGrid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .featureCard {
+      position: relative;
+      padding: 24px;
+      min-height: 230px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(99,230,190,0.10), transparent 30%),
+        linear-gradient(180deg, rgba(58,58,60,0.72), rgba(34,34,36,0.94));
+      border: 1px solid rgba(99,230,190,0.08);
+    }
+
+    .featureTop {
+      display: grid;
+      gap: 16px;
+    }
+
+    .featureIcon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(99,230,190,0.18), rgba(99,230,190,0.08));
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      border: 1px solid rgba(99,230,190,0.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .featureCard h3 {
+      font-size: 18px;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .featureCard p {
+      color: var(--text2);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .featureFoot {
+      color: var(--text3);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin-top: 18px;
+    }
+
+    .featureGlow {
+      position: absolute;
+      right: -30px;
+      bottom: -30px;
+      width: 120px;
+      height: 120px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(99,230,190,0.12), transparent 68%);
+      pointer-events: none;
+    }
+
+    .ctaSection {
+      padding-top: 22px;
+      padding-bottom: 72px;
+    }
+
+    .ctaCard {
+      padding: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .ctaCopy h2 {
+      margin-bottom: 12px;
+      max-width: 10ch;
+    }
+
+    .ctaCopy p {
+      color: var(--text2);
+      max-width: 58ch;
+      line-height: 1.75;
+    }
+
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0 40px;
+      color: var(--text3);
+      font-size: 12px;
+      font-family: var(--font-mono);
+    }
+
+    .footerInner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 1040px) {
+      .heroWrap,
+      .featureGrid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .heroWrap {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        max-width: 12ch;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .navLinks {
+        display: none;
+      }
+
+      .appShell,
+      .featureGrid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .sectionHead {
+        display: block;
+      }
+
+      .ctaCard {
+        padding: 22px;
+      }
+
+      h1 {
+        font-size: clamp(40px, 15vw, 64px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="container navInner">
+      <a href="#top" class="brand">
+        <div class="brandMark">N</div>
+        <span>Noted</span>
+      </a>
+
+      <nav class="navLinks">
+        <a href="#features">Features</a>
+        <a href="#buy" class="button buttonPrimary">Buy</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container heroWrap">
+        <div>
+          <div class="eyebrow">Privacy-first</div>
+          <h1>Record meetings. Get the todos.</h1>
+          <p class="heroCopy">
+            Works with Zoom, Teams, or any one of your favourite meeting apps. Noted runs entirely on your Mac, so your conversations stay private.
+          </p>
+
+          <div class="heroActions">
+            <a href="#buy" class="button buttonPrimary">Buy</a>
+            <a href="#features" class="button buttonSecondary">Features</a>
+          </div>
+        </div>
+
+        <div class="panel productShot">
+          <div class="windowBar">
+            <div class="dots">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+
+          <div class="appShell">
+            <aside class="sidebar">
+              <div class="sidebarTop">
+                <div class="logoRow">
+                  <div class="miniBrand">
+                    <div class="brandMark">N</div>
+                    <span>Noted</span>
+                  </div>
+                  <button class="iconBtn">‹</button>
+                </div>
+
+                <div class="progress">
+                  <div class="progressLabel">
+                    <span>7 / 12 done</span>
+                    <span>58%</span>
+                  </div>
+                  <div class="progressBar"><div class="progressFill"></div></div>
+                </div>
+
+                <div class="navGroup">
+                  <button class="navBtn active"><span class="navDot"></span><span>All</span><span class="navCount">12</span></button>
+                  <button class="navBtn"><span class="navDot pending"></span><span>Pending</span><span class="navCount">5</span></button>
+                  <button class="navBtn"><span class="navDot done"></span><span>Done</span><span class="navCount">7</span></button>
+                </div>
+
+                <div class="sortRow">
+                  <button class="sortBtn active">Date</button>
+                  <button class="sortBtn">Priority</button>
+                </div>
+              </div>
+
+              <div class="teamWrap">
+                <div class="teamTop">
+                  <div class="teamTitle">Team</div>
+                  <div class="teamCount">3</div>
+                </div>
+                <div class="memberList">
+                  <div class="memberItem">
+                    <div class="memberAvatar" style="background:#63e6be;"><span>PT</span></div>
+                    <div class="memberMeta">
+                      <div class="memberName">Priya Patel</div>
+                    </div>
+                  </div>
+                  <div class="memberItem">
+                    <div class="memberAvatar" style="background:#93c5fd;"><span>MJ</span></div>
+                    <div class="memberMeta">
+                      <div class="memberName">Marcus Johnson</div>
+                    </div>
+                  </div>
+                  <div class="memberItem">
+                    <div class="memberAvatar" style="background:#f9a8d4;"><span>LR</span></div>
+                    <div class="memberMeta">
+                      <div class="memberName">Luca Rossi</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sidebarDivider"></div>
+
+              <div class="calendarWrap">
+                <div class="calendarHead">
+                  <div class="calendarTitle">April 2026</div>
+                  <div class="calendarNav"><span>‹</span><span>›</span></div>
+                </div>
+                <div class="calendarDays">
+                  <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                </div>
+                <div class="calendarDates">
+                  <div class="dateCell muted">29</div><div class="dateCell muted">30</div><div class="dateCell">1</div><div class="dateCell">2</div><div class="dateCell">3</div><div class="dateCell">4</div><div class="dateCell">5</div>
+                  <div class="dateCell">6</div><div class="dateCell">7</div><div class="dateCell">8</div><div class="dateCell hasEvent">9</div><div class="dateCell">10</div><div class="dateCell today">11</div><div class="dateCell">12</div>
+                  <div class="dateCell">13</div><div class="dateCell">14</div><div class="dateCell selected hasEvent">15</div><div class="dateCell">16</div><div class="dateCell">17</div><div class="dateCell">18</div><div class="dateCell">19</div>
+                </div>
+              </div>
+            </aside>
+
+            <div class="mainPanel">
+              <div class="toolbar">
+                <button class="recordBtn">
+                    <span class="recordDot"></span>
+                    <span>Record</span>
+                </button>
+
+                <button class="toolbarBtn">+ Transcript</button>
+                </div>
+
+
+              <div class="canvas">
+                <div class="group">
+                  <div class="groupHeader">
+                    <span class="chevron">▾</span>
+                    <span class="groupTitle">Weekly Product Sync</span>
+                    <span class="groupCount">3</span>
+                    <span class="transcriptBtn">Transcript</span>
+                  </div>
+                  <div class="groupSummary">A weekly meeting where key blockers to product delivery were discussed and risk mitigations were introduced.</div>
+
+                  <div class="todoItem">
+                    <div class="checkbox"></div>
+                    <div class="todoContent">
+                      <div class="todoText">Schedule follow-up meeting with QA regarding regression failures</div>
+                      <div class="todoMeta">
+                        <div class="memberAvatar" style="background:#63e6be;"><span>PT</span></div>
+                        <span class="priorityBadge priority1">High</span>
+                        <span class="metaDate">Today</span>
+                      </div>
+                    </div>
+                    <div class="todoActions"><span class="actionBtn">✎</span></div>
+                  </div>
+
+                  <div class="todoItem">
+                    <div class="checkbox checked"></div>
+                    <div class="todoContent">
+                      <div class="todoText">Confirm deployment window with infrastructure team</div>
+                      <div class="todoMeta">
+                        <div class="memberAvatar" style="background:#f9a8d4;"><span>LR</span></div>
+                        <span class="priorityBadge priority2">Medium</span>
+                        <span class="metaDate">Tomorrow</span>
+                      </div>
+                    </div>
+                    <div class="todoActions"><span class="actionBtn">✎</span></div>
+                  </div>
+
+                  <div class="todoItem">
+                    <div class="checkbox"></div>
+                    <div class="todoContent">
+                      <div class="todoText">Prepare mitigation plan for delayed authentication rollout</div>
+                      <div class="todoMeta">
+                        <div class="memberAvatar" style="background:#f9a8d4;"><span>LR</span></div>
+                        <div class="memberAvatar" style="background:#63e6be;"><span>PT</span></div>
+                        <span class="priorityBadge priority2">Medium</span>
+                        <span class="metaDate">Fri</span>
+                      </div>
+                    </div>
+                    <div class="todoActions"><span class="actionBtn">✎</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="container">
+        <div class="sectionHead">
+          <div>
+            <div class="kicker">Features</div>
+            <h2>Your AI-powered tool that turns meetings into action.</h2>
+            <p class="sectionText">
+              Record your meetings and automatically generate clear summaries and trackable action items. Noted runs entirely on your Mac, using local AI so your conversations stay private.
+            </p>
+          </div>
+          <div class="sectionMono">Core Features</div>
+        </div>
+
+        <div class="featureGrid">
+          <article class="panel featureCard">
+  <div class="featureGlow"></div>
+
+  <div class="featureTop">
+
+    <div class="progress">
+      <div class="progressLabel">
+        <span>7 / 12 done</span>
+        <span>58%</span>
+      </div>
+
+      <div class="progressBar">
+        <div class="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="navGroup">
+                  <button class="navBtn active"><span class="navDot"></span><span>All</span><span class="navCount">12</span></button>
+                  <button class="navBtn"><span class="navDot pending"></span><span>Pending</span><span class="navCount">5</span></button>
+                  <button class="navBtn"><span class="navDot done"></span><span>Done</span><span class="navCount">7</span></button>
+                </div>
+    <div>
+      <h3>Track progress</h3>
+      <p>Instantly see what’s been completed and what still needs attention after every meeting.</p>
+    </div>
+
+  </div>
+
+  <div class="featureFoot">Progress tracking</div>
+</article>
+
+          <article class="panel featureCard">
+  <div class="featureGlow"></div>
+
+  <div class="featureTop">
+    <div class="members">
+      <div class="memberList">
+                  <div class="memberItem">
+                    <div class="memberAvatar" style="background:#63e6be;"><span>PT</span></div>
+                    <div class="memberMeta">
+                      <div class="memberName">Priya Patel</div>
+                    </div>
+                  </div>
+                  <div class="memberItem">
+                    <div class="memberAvatar" style="background:#93c5fd;"><span>MJ</span></div>
+                    <div class="memberMeta">
+                      <div class="memberName">Marcus Johnson</div>
+                    </div>
+                  </div>
+                  <div class="memberItem">
+                    <div class="memberAvatar" style="background:#f9a8d4;"><span>LR</span></div>
+                    <div class="memberMeta">
+                      <div class="memberName">Luca Rossi</div>
+                    </div>
+                  </div>
+                </div>
+    </div>
+
+    <div>
+      <h3>Built for teams</h3>
+      <p>Assign and track tasks across your team so everyone leaves meetings knowing what to do next.</p>
+    </div>
+  </div>
+
+  <div class="featureFoot">Team coordination</div>
+</article>
+
+          
+<article class="panel featureCard">
+  <div class="featureGlow"></div>
+
+  <div class="featureTop">
+    <div class="group">
+      <div class="groupHeader">
+        <span class="chevron">▾</span>
+        <span class="groupTitle">Meeting Summary</span>
+        <span class="groupCount">3</span>
+        <span class="transcriptBtn">Transcript</span>
+      </div>
+
+      <div class="groupSummary">
+        A weekly meeting where key blockers to product delivery were discussed and risk mitigations were introduced.
+      </div>
+
+      <div class="todoItem">
+        <div class="checkbox checked"></div>
+        <div class="todoContent">
+          <div class="todoText">Confirm deployment window with infrastructure team</div>
+          <div class="todoMeta">
+            <div class="memberAvatar" style="background:#f9a8d4;"><span>LR</span></div>
+            <span class="priorityBadge priority2">Medium</span>
+            <span class="metaDate">Tomorrow</span>
+          </div>
+        </div>
+        <div class="todoActions"><span class="actionBtn">✎</span></div>
+      </div>
+    </div>
+
+
+
+    <div>
+      <h3>Automatic summaries and trackable tasks</h3>
+      <p>Noted turns meetings into concise summaries and structured to-dos you can actually follow up on.</p>
+    </div>
+  </div>
+
+  <div class="featureFoot">Meeting intelligence</div>
+</article>
+
+          <article class="panel featureCard">
+  <div class="featureGlow"></div>
+
+  <div class="featureTop">
+
+    <div class="search">
+      Search todos or meetings
+    </div>
+
+    <div>
+      <h3>Search everything</h3>
+      <p>Instantly find tasks, transcripts, and decisions across all your meetings.</p>
+    </div>
+
+  </div>
+
+  <div class="featureFoot">Instant search</div>
+</article>
+        </div>
+      </div>
+    </section>
+
+    <section class="ctaSection" id="buy">
+      <div class="container">
+        <div class="panel ctaCard">
+          <div class="ctaCopy">
+            <div class="kicker">Get Noted</div>
+            <h2>Turn your meetings into action.</h2>
+            <p>
+              Record meetings, generate summaries, and track action items. Processed locally on your Mac. Works with Zoom, Teams, and any meeting app.
+            </p>
+          </div>
+
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <a href="#" class="button buttonPrimary">Get Noted</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+  <div class="container footerInner">
+    <div>© 2026 Noted</div>
+
+    <div>
+      <a href="mailto:support@notedapp.ai">Support</a> ·
+      <a href="#">Privacy</a> ·
+      <a href="#">Terms</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
