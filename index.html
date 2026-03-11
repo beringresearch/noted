@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Noted. Privacy-first AI Meeting Notes & Action Items for Mac</title>
-  <meta name="description" content="Record meetings, generate summaries, and extract action items automatically. Noted runs locally on your Mac for complete privacy." />
+  <meta name="description" content="Record meetings, generate summaries, parse emails, and extract action items automatically. Noted runs locally on your Mac for complete privacy." />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
@@ -864,8 +864,12 @@
 
     .featureGrid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
+    }
+
+    .featureCardWide {
+      grid-column: span 2;
     }
 
     .featureCard {
@@ -975,6 +979,108 @@
       flex-wrap: wrap;
     }
 
+    .toolbarBtnEmail {
+      height: 34px;
+      width: 34px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius);
+      background: rgba(99,230,190,0.10);
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 12px;
+      border: 1px solid rgba(99,230,190,0.18);
+      white-space: nowrap;
+    }
+
+    .emailGroup .groupHeader {
+      background: rgba(99,230,190,0.06);
+      border-bottom-color: rgba(99,230,190,0.12);
+    }
+
+    .emailGroupTitle {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--accent) !important;
+    }
+
+    .emailSubjectHeader {
+      display: flex;
+      align-items: center;
+      padding: 5px 14px;
+      background: rgba(99,230,190,0.04);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .emailSubjectTitle {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      color: var(--text3);
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Email feature card illustration */
+    .emailScanIllustration {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .emailScanHeader {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: rgba(99,230,190,0.07);
+      border: 1px solid rgba(99,230,190,0.14);
+      border-radius: 7px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--accent);
+    }
+
+    .emailScanRow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      background: rgba(44,44,46,0.6);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+    }
+
+    .emailScanDot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+
+    .emailScanText {
+      font-size: 11px;
+      color: var(--text2);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .emailScanBadge {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
     @media (max-width: 1040px) {
       .heroWrap,
       .featureGrid {
@@ -983,6 +1089,10 @@
 
       .heroWrap {
         grid-template-columns: 1fr;
+      }
+
+      .featureCardWide {
+        grid-column: span 2;
       }
 
       h1 {
@@ -998,6 +1108,10 @@
       .appShell,
       .featureGrid {
         grid-template-columns: 1fr;
+      }
+
+      .featureCardWide {
+        grid-column: span 1;
       }
 
       .sidebar {
@@ -1038,9 +1152,9 @@
       <div class="container heroWrap">
         <div>
           <div class="eyebrow">Privacy-first</div>
-          <h1>Record meetings. Get the todos.</h1>
+          <h1>Record meetings. Analyse emails. Get the todos.</h1>
           <p class="heroCopy">
-            Works with Zoom, Teams, or any one of your favourite meeting apps. Noted runs entirely on your Mac, so your conversations stay private.
+            Record your meeting and scans your Apple Mail. Noted runs summarises your actions and creates todos entirely on your Mac, so your conversations stay private.
           </p>
 
           <div class="heroActions">
@@ -1141,7 +1255,12 @@
                     <span>Record</span>
                 </button>
 
-                <button class="toolbarBtn">+ Transcript</button>
+                <button class="toolbarBtn toolbarBtnEmail" title="Add transcript">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </button>
+                <button class="toolbarBtn toolbarBtnEmail" title="Scan emails">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </button>
                 </div>
 
 
@@ -1150,7 +1269,7 @@
                   <div class="groupHeader">
                     <span class="chevron">▾</span>
                     <span class="groupTitle">Weekly Product Sync</span>
-                    <span class="groupCount">3</span>
+                    <span class="groupCount">2</span>
                     <span class="transcriptBtn">Transcript</span>
                   </div>
                   <div class="groupSummary">A weekly meeting where key blockers to product delivery were discussed and risk mitigations were introduced.</div>
@@ -1181,15 +1300,28 @@
                     <div class="todoActions"><span class="actionBtn">✎</span></div>
                   </div>
 
+                </div>
+
+                <div class="group emailGroup">
+                  <div class="groupHeader">
+                    <span class="chevron">▾</span>
+                    <span class="groupTitle emailGroupTitle">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.7;flex-shrink:0"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                      Emails — Today
+                    </span>
+                    <span class="groupCount">1</span>
+                  </div>
+
+                  <div class="emailSubjectHeader">
+                    <span class="emailSubjectTitle">Vendor contract renewal — action needed</span>
+                  </div>
                   <div class="todoItem">
                     <div class="checkbox"></div>
                     <div class="todoContent">
-                      <div class="todoText">Prepare mitigation plan for delayed authentication rollout</div>
+                      <div class="todoText">Sign and return vendor contract before end of month</div>
                       <div class="todoMeta">
-                        <div class="memberAvatar" style="background:#f9a8d4;"><span>LR</span></div>
-                        <div class="memberAvatar" style="background:#63e6be;"><span>PT</span></div>
-                        <span class="priorityBadge priority2">Medium</span>
-                        <span class="metaDate">Fri</span>
+                        <span class="priorityBadge priority1">High</span>
+                        <span class="metaDate">Today</span>
                       </div>
                     </div>
                     <div class="todoActions"><span class="actionBtn">✎</span></div>
@@ -1325,6 +1457,41 @@
   <div class="featureFoot">Meeting intelligence</div>
 </article>
 
+          <article class="panel featureCard featureCardWide">
+  <div class="featureGlow"></div>
+  <div class="featureTop">
+
+    <div class="emailScanIllustration">
+      <div class="emailScanHeader">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        <span>Emails — Today · 3 extracted</span>
+        <span style="margin-left:auto;color:var(--text3)">Inbox · Work</span>
+      </div>
+      <div class="emailScanRow">
+        <div class="emailScanDot"></div>
+        <div class="emailScanText">Review updated roadmap and share feedback by Thursday</div>
+        <span class="emailScanBadge priority2" style="color:#fbbf24;background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3)">Medium</span>
+      </div>
+      <div class="emailScanRow">
+        <div class="emailScanDot"></div>
+        <div class="emailScanText">Sign and return vendor contract before end of month</div>
+        <span class="emailScanBadge priority1" style="color:#f87171;background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.3)">High</span>
+      </div>
+      <div class="emailScanRow">
+        <div class="emailScanDot" style="background:var(--text3)"></div>
+        <div class="emailScanText">Schedule onboarding call with new design contractor</div>
+        <span class="emailScanBadge" style="color:var(--text3);background:var(--bg3);border:1px solid var(--border)">Low</span>
+      </div>
+    </div>
+
+    <div>
+      <h3>Todos from your inbox</h3>
+      <p>Noted scans your Apple Mail and extracts action items directly from your emails — so nothing slips through the cracks. Tasks are grouped by email thread, right alongside your meeting todos.</p>
+    </div>
+  </div>
+  <div class="featureFoot">Apple Mail integration</div>
+</article>
+
           <article class="panel featureCard">
   <div class="featureGlow"></div>
 
@@ -1354,7 +1521,7 @@
             <div class="kicker">Get Noted</div>
             <h2>Turn your meetings into action.</h2>
             <p>
-              Record meetings, generate summaries, and track action items. Processed locally on your Mac. Works with Zoom, Teams, and any meeting app.
+              Record meetings, generate summaries, track action items, and scan Apple Mail to catch todos from your inbox. Processed entirely on your Mac.
             </p>
           </div>
 
@@ -1372,10 +1539,6 @@
 
     <div>
       <a href="/faq">Frequently Asked Questions</a> ·
-      <a href="mailto:support@notedapp.ai">Support</a> ·
+      <a href="/cdn-cgi/l/email-protection#44373134342b3630042a2b3021202534346a252d">Support</a> ·
       <a href="/terms">Terms</a>
-    </div>
-  </div>
-</footer>
-</body>
-</html>
+    
